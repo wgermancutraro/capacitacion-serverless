@@ -55,8 +55,26 @@ functions:
                 name: ClientCreateModel
                 description: 'Validation model for Creating Clients'
 
+  SendGift:
+    handler: functions/send_gift/app.handler
+    environment:
+      CLIENTS_TABLE: 'clients_table'
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+        - dynamodb:UpdateItem
+        Resource: !GetAtt ClientsTable.Arn
+      - Effect: 'Allow'
+        Action:
+        - sqs:ReceiveMessage
+        Resource: !GetAtt ClientRoleQueue.Arn
+    events:
+      - sqs:
+          arn: !GetAtt ClientRoleQueue.Arn    
+
 resources:
   - ${file(resources/dynamodb.yml)}
+  - ${file(resources/sqs.yml)}
 
 plugins:
   - serverless-webpack

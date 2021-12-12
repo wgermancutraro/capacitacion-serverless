@@ -1,0 +1,6 @@
+Resources:
+  ClientRoleQueue:
+    Type: 'AWS::SQS::Queue'
+    Properties:
+      QueueName: client_role_queue
+      MessageRetentionPeriod: 120
