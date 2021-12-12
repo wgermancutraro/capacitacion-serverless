@@ -1,0 +1,58 @@
+service: serverless-wolox
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'develop'}
+  lambdaHashingVersion: 20201221
+
+package:
+  individually: true
+  excludeDevDependencies: true
+  patterns:
+    - '!.git/**'
+    - '!.serverless/**'
+    - '!aws-sdk'
+    - '!resources/**'
+
+functions:
+  GetClients:
+    handler: functions/get_clients/app.handler
+    environment:
+      CLIENTS_TABLE: 'clients_table'
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+        - dynamodb:GetItem
+        Resource: !GetAtt ClientsTable.Arn
+    events:
+      - http:
+          path: clients/{id}
+          method: get
+          cors: true
+
+  CreateClient:
+    handler: functions/create_client/app.handler
+    environment:
+      CLIENTS_TABLE: 'clients_table'
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+        - dynamodb:PutItem
+        Resource: !GetAtt ClientsTable.Arn
+    events:
+      - http:
+          path: clients
+          method: post
+          cors: true
+
+resources:
+  - ${file(resources/dynamodb.yml)}
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-iam-roles-per-function

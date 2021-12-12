@@ -1,0 +1,32 @@
+{
+  "name": "serverless-wolox",
+  "version": "1.0.0",
+  "description": "Capacitación Serverless - Wolox",
+  "main": "handler.js",
+  "scripts": {
+    "deploy": "sls deploy --stage develop"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonnyalexbh/serverless-wolox.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonnyalexbh/serverless-wolox/issues"
+  },
+  "homepage": "https://github.com/jonnyalexbh/serverless-wolox#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1046.0",
+    "serverless-offline": "^8.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.3.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "serverless-iam-roles-per-function": "^3.2.0",
+    "serverless-webpack": "^5.6.0",
+    "webpack": "^5.65.0"
+  }
+}
