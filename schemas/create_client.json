@@ -1,0 +1,27 @@
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "The Root Schema",
+    "required": ["client_id", "name", "role"],
+    "properties": {
+      "client_id": {
+        "type": "string",
+        "title": "Client Id",
+        "default": "",
+        "pattern": "^[a-zA-Z0-9]+$"
+      },
+      "name": {
+        "type": "string",
+        "title": "Client Name",
+        "default": "",
+        "pattern": "^[a-zA-Z0-9]+$"
+      },
+      "role": {
+        "type": "string",
+        "title": "Client Role",
+        "default": "user",
+        "pattern": "^[a-zA-Z0-9]+$"
+      }
+    }
+  }

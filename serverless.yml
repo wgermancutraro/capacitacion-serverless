@@ -48,6 +48,12 @@ functions:
           path: clients
           method: post
           cors: true
+          request:
+            schemas:
+              application/json:
+                schema: ${file(schemas/create_client.json)}
+                name: ClientCreateModel
+                description: 'Validation model for Creating Clients'
 
 resources:
   - ${file(resources/dynamodb.yml)}
