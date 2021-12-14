@@ -4,3 +4,29 @@ Resources:
     Properties:
       QueueName: client_role_queue
       MessageRetentionPeriod: 120
+
+  eventEventRule: 
+    Type: AWS::Events::Rule
+    Properties:      
+      EventPattern: 
+        source:
+          - "client_rule"
+        detail-type:
+          - "Client Created"
+      Targets: 
+        - Arn: !GetAtt ClientRoleQueue.Arn
+          Id: "SQSqueue"
+
+  # Allow EventBridge to invoke SQS
+  EventBridgeToToSqsPolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: events.amazonaws.com
+          Action: SQS:SendMessage
+          Resource:  !GetAtt ClientRoleQueue.Arn
+      Queues:
+        - Ref: ClientRoleQueue

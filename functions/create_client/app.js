@@ -1,9 +1,10 @@
-const { createClient } = require('./service');
+const { createClient, publishEvent } = require('./service');
 
 module.exports.handler = async (event) => {
   try {
     const body = JSON.parse(event.body);
     await createClient(body);
+    await publishEvent(body);
 
     return {
       statusCode: 200,
