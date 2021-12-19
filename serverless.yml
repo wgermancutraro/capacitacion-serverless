@@ -74,7 +74,10 @@ functions:
         Resource: !GetAtt ClientRoleQueue.Arn
     events:
       - sqs:
-          arn: !GetAtt ClientRoleQueue.Arn    
+          arn: !GetAtt ClientRoleQueue.Arn   
+      - stream:
+          type: dynamodb
+          arn:  !GetAtt ClientsTable.StreamArn
 
 resources:
   - ${file(resources/dynamodb.yml)}

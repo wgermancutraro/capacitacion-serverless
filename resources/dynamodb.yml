@@ -12,3 +12,5 @@ Resources:
         ProvisionedThroughput: 
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
+        StreamSpecification:
+            StreamViewType: NEW_AND_OLD_IMAGES  

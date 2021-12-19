@@ -4,7 +4,7 @@ const { setGift } = require('./helpers');
 const db = new dynamodb.DocumentClient({ region: 'us-east-1' });
 const TABLE_NAME = process.env.CLIENTS_TABLE;
 
-exports.setClientGift = async ({ detail: client }) => {
+exports.setClientGift = async (client) => {
   const params = {
     TableName: TABLE_NAME,
     Key: {
