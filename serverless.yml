@@ -7,7 +7,13 @@ provider:
   runtime: nodejs14.x
   region: ${opt:region, 'us-east-1'}
   stage: ${opt:stage, 'develop'}
+  environment:
+    accountId: ${aws:accountId}
+    SHIPMENT_ARN: arn:aws:lambda:${self:provider.region}:${self:provider.environment.accountId}:function:${self:service}-${self:provider.stage}-createShipment
   lambdaHashingVersion: 20201221
+  eventBridge:
+    useCloudFormation: true
+
 
 package:
   individually: true
@@ -26,11 +32,26 @@ functions:
     iamRoleStatements:
       - Effect: 'Allow'
         Action:
-        - dynamodb:GetItem
+        - dynamodb:Scan
         Resource: !GetAtt ClientsTable.Arn
     events:
       - http:
-          path: clients/{id}
+          path: clients
+          method: get
+          cors: true
+
+  GetShipments:
+    handler: functions/get_shipments/app.handler
+    environment:
+      SHIPMENT_TABLE: 'shipments_table'
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+        - dynamodb:Scan
+        Resource: !GetAtt ShipmentsTable.Arn
+    events:
+      - http:
+          path: shipments
           method: get
           cors: true
 
@@ -42,6 +63,7 @@ functions:
       - Effect: 'Allow'
         Action:
         - dynamodb:PutItem
+        - dynamodb:GetItem
         Resource: !GetAtt ClientsTable.Arn
       - Effect: 'Allow'
         Action:
@@ -78,6 +100,28 @@ functions:
       - stream:
           type: dynamodb
           arn:  !GetAtt ClientsTable.StreamArn
+
+  CreateShipment:
+    handler: functions/create_shipment/app.handler
+    environment:
+      SHIPMENT_TABLE: 'shipments_table'
+    iamRoleStatements:
+      - Effect: 'Allow'
+        Action:
+        - dynamodb:Query 
+        - dynamodb:PutItem 
+        - dynamodb:UpdateItem 
+        Resource: !GetAtt ShipmentsTable.Arn
+    events:
+      - eventBridge:
+        pattern:
+          source:
+            - 'shipment_rule'
+          detail-type:
+            - 'Shipment'   
+      - stream:
+          type: dynamodb
+          arn:  !GetAtt ClientsTable.StreamArn      
 
 resources:
   - ${file(resources/dynamodb.yml)}

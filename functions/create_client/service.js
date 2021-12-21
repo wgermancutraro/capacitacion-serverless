@@ -15,13 +15,24 @@ exports.createClient = async (client) => {
   return db.put(params).promise();
 };
 
-exports.publishEvent = async (event) => {
+exports.getClientById = async (id) => {
+  const params = {
+    TableName: TABLE_NAME,
+    Key: {
+      client_id: id,
+    },
+  };
+
+  return db.get(params).promise();
+};
+
+exports.publishEvent = async ({ event, action, source }) => {
   const params = {
     Entries: [
       {
         Detail: JSON.stringify(event),
-        DetailType: 'Client Created',
-        Source: 'client_rule',
+        DetailType: action,
+        Source: source,
       },
     ],
   };

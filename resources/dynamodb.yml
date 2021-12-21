@@ -14,3 +14,20 @@ Resources:
           WriteCapacityUnits: 5
         StreamSpecification:
             StreamViewType: NEW_AND_OLD_IMAGES  
+    ShipmentsTable: 
+      Type: AWS::DynamoDB::Table
+      Properties: 
+        TableName: shipments_table
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions: 
+          - AttributeName: client_id
+            AttributeType: S
+          - AttributeName: shipment_id
+            AttributeType: S   
+        KeySchema: 
+          - AttributeName: client_id
+            KeyType: HASH
+          - AttributeName: shipment_id
+            KeyType: RANGE
+        StreamSpecification:
+            StreamViewType: NEW_AND_OLD_IMAGES          

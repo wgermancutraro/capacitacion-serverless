@@ -5,6 +5,7 @@ Resources:
       QueueName: client_role_queue
       MessageRetentionPeriod: 120
 
+
   eventEventRule: 
     Type: AWS::Events::Rule
     Properties:      
@@ -15,7 +16,19 @@ Resources:
           - "Client Created"
       Targets: 
         - Arn: !GetAtt ClientRoleQueue.Arn
-          Id: "SQSqueue"
+          Id: "SQSqueue"        
+
+  shipmentEventRule: 
+    Type: AWS::Events::Rule
+    Properties:      
+      EventPattern: 
+        source:
+          - "shipment_rule"
+        detail-type:
+          - "Shipment"
+      Targets: 
+        - Arn: "arn:aws:lambda:us-east-1:550008309007:function:serverless-wolox-develop-CreateShipment"
+          Id: "Lambda"
 
   # Allow EventBridge to invoke SQS
   EventBridgeToToSqsPolicy:
@@ -28,5 +41,8 @@ Resources:
             Service: events.amazonaws.com
           Action: SQS:SendMessage
           Resource:  !GetAtt ClientRoleQueue.Arn
+        - Effect: Allow
+          Action: Lambda:Invoke
+          Resource: "arn:aws:lambda:us-east-1:550008309007:function:serverless-wolox-develop-CreateShipment"
       Queues:
         - Ref: ClientRoleQueue

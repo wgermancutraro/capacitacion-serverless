@@ -4,7 +4,8 @@
   "description": "Capacitación Serverless - Wolox",
   "main": "handler.js",
   "scripts": {
-    "deploy": "sls deploy --stage develop"
+    "deploy": "sls deploy --stage develop",
+    "deploy:function": "sls deploy --verbose --function"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,8 @@
   "homepage": "https://github.com/jonnyalexbh/serverless-wolox#readme",
   "dependencies": {
     "aws-sdk": "^2.1046.0",
-    "serverless-offline": "^8.3.1"
+    "serverless-offline": "^8.3.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "^8.3.0",

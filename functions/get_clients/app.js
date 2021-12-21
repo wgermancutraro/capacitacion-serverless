@@ -1,19 +1,12 @@
-const { getClientById } = require('./service');
+const { getClients } = require('./service');
 
-module.exports.handler = async (event) => {
+module.exports.handler = async () => {
   try {
-    const { Item } = await getClientById(event.pathParameters.id);
-
-    if (!Item) {
-      return {
-        statusCode: 404,
-        body: JSON.stringify({ error: 'Client not found' }),
-      };
-    }
+    const { Items } = await getClients();
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ ...Item }),
+      body: JSON.stringify(Items),
     };
   } catch (error) {
     return {
