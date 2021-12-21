@@ -1,9 +1,9 @@
 exports.setGift = (role) => {
   switch (role.toLowerCase()) {
     case 'admin':
-      return 'House';
+      return 'Mac OS';
     case 'user':
-      return 'Car';
+      return 'ChromeBook';
     default:
       return 'Pizza';
   }
