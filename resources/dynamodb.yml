@@ -29,5 +29,4 @@ Resources:
             KeyType: HASH
           - AttributeName: shipment_id
             KeyType: RANGE
-        StreamSpecification:
-            StreamViewType: NEW_AND_OLD_IMAGES          
+         

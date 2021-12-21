@@ -114,11 +114,11 @@ functions:
         Resource: !GetAtt ShipmentsTable.Arn
     events:
       - eventBridge:
-        pattern:
-          source:
-            - 'shipment_rule'
-          detail-type:
-            - 'Shipment'   
+          pattern:
+            source:
+              - 'shipment_rule'
+            detail-type:
+              - 'Shipment'   
       - stream:
           type: dynamodb
           arn:  !GetAtt ClientsTable.StreamArn      

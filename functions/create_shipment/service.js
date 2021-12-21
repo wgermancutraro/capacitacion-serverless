@@ -9,7 +9,6 @@ exports.createShipment = async (item) => {
     TableName: TABLE_NAME,
     Item: item,
   };
-
   return db.put(params).promise();
 };
 

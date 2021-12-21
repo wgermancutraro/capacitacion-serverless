@@ -12,13 +12,19 @@ const {
 module.exports.handler = async (event) => {
   try {
     const clientId =
-      event.detail.client_id ||
-      event?.Records[0]?.dynamodb?.NewImage?.client_id.S;
+      event.detail?.client_id ||
+      event.Records[0]?.dynamodb?.NewImage?.client_id.S;
     const isFromStream = !!event?.Records;
 
     const { Items: existShipment } = await getShipment(clientId);
 
-    if (existShipment.length && !isFromStream) {
+    if (
+      existShipment.length &&
+      existShipment.some(
+        (s) => s.status === 'PENDING' && s.client_id === clientId
+      ) &&
+      !isFromStream
+    ) {
       await Promise.all(
         existShipment.map(async (_, i) => {
           await updateShipmentStatus(clientId, existShipment[i].shipment_id);
@@ -33,7 +39,6 @@ module.exports.handler = async (event) => {
 
     return { statusCode: 200 };
   } catch (error) {
-    console.log(error);
     return {
       statusCode: 500,
       body: JSON.stringify(error),
